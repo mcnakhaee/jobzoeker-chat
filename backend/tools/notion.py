@@ -143,7 +143,7 @@ async def _find_or_create_database(
     parent_page_id: str,
 ) -> str:
     """Return the id of a database named `database_name`, creating it if needed."""
-    search = await client.search(query=database_name, filter={"value": "database", "property": "object"})
+    search = await client.search(query=database_name)
 
     for result in search["results"]:
         if result["object"] == "database":
