@@ -88,6 +88,8 @@ async def _execute_task(
     """
     task_id = task["id"]
     messages = list(context.get_messages())
+    if not messages:
+        messages = [{"role": "user", "content": task["description"]}]
     response = {"text": "", "tool_calls": []}
 
     yield {"type": "agent_log", "task_id": task_id, "message": "Thinking…"}

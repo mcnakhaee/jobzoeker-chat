@@ -40,6 +40,9 @@ async def call_llm(
           ]
         }
     """
+    if not messages:
+        raise ValueError("call_llm requires at least one message in 'messages'")
+
     client = get_client()
 
     # The Responses API requires the word "json" to appear somewhere in `input`
