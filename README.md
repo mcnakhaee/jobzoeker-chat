@@ -1,6 +1,6 @@
 # Jobzoeker Chat
 
-
+![AI job search execution](done-scr.png)
 This project is a job-search agent that, based on the user's request, generates structured plans to help the user with their job search and executes them step by step.
 
 For example, you are looking for AI Enginnering jobs in Amsterdam and you want to generate cover letters for one of the jobs you find interesting and save them to one of your Notion pages.
@@ -87,12 +87,12 @@ It contains no raw JSON, no tool call items, no plan injection.
 
 **Text normalisation** — before any message enters the window, noise is stripped:
 - User messages: stopwords removed (`a`, `the`, `is`, `to`, etc.)
-- Assistant messages: Inspired by this project (https://github.com/JuliusBrussee/caveman/tree/main), a caveman compression is applied which means articles, fillers (`just`, `basically`, `actually`), pleasantries (`certainly`, `of course`), and hedging (`might`, `perhaps`) are dropped from the context (hardcoded).
+- Assistant messages: Inspired by this project (https://github.com/JuliusBrussee/caveman/tree/main), a **caveman compression** is applied which means articles, fillers (`just`, `basically`, `actually`), pleasantries (`certainly`, `of course`), and hedging (`might`, `perhaps`) are dropped from the context (hardcoded).
 
 **Not every tool contains equally important information.**
 Information on tools such as saving to Notion or composing a cover letter does not contain the same value as the user's job search query, so they are heavily trimmed in the context. `job_search` results are kept in full so the planner can reference specific jobs by name across turns.
 
-TODO: add layered/tiered context; for example, information specific to the user can be stored in a layer different from the retrieved jobs, since user-specific information could be more important.
+**TODO**: add layered/tiered context; for example, information specific to the user can be stored in a layer different from the retrieved jobs, since user-specific information could be more important.
 
 ---
 
@@ -117,7 +117,7 @@ backend/
 │   └── index_jobs.py     # one-time indexing script for weaviate (I used Mistral embedding models)
 ├── config.py             # tool definitions (OpenAI function-calling format)
 ├── main.py               # FastAPI app
-└── test_agent.ipynb      # end-to-end test notebook
+
 ```
 
 ---
@@ -128,7 +128,7 @@ backend/
 
 ```bash
 pip install -r requirements.txt
-cp .env.example .env      # fill in API keys
+cp .env.example .env     
 ```
 
 Required env vars: `OPENAI_API_KEY`, `MISTRAL_API_KEY`, `WEAVIATE_URL`, `WEAVIATE_API_KEY`, `NOTION_TOKEN`, `NOTION_PARENT_PAGE_ID`.
@@ -211,9 +211,10 @@ The simplest  way to evaluate the planning and execution stages is a golden data
 ---
 
 ## Example transcript
-![AI job search execution](done-scr.png)
+
 
 ![Agent thinking process](thinking-scr.png)
+![AI job search execution](done-scr.png)
 Real session captured from the chat UI. User goal: find AI engineering jobs in Amsterdam, save them to Notion, and look up one company.
 
 ---
