@@ -39,7 +39,7 @@ async def search_company_info(company_name: str) -> dict:
 
     try:
         response = await client.chat.completions.create(
-            model="gpt-4o-mini",
+            model="gpt-4.1-mini",
             temperature=0.1,
             messages=[
                 {"role": "system", "content": COMPANY_INFO_PROMPT},

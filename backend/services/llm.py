@@ -17,7 +17,7 @@ def get_client() -> AsyncOpenAI:
 async def call_llm(
     messages: list[dict],
     system_prompt: str,
-    model: str = "gpt-4o-mini",
+    model: str = "gpt-4.1-mini",
     is_json: bool = False,
     tools: list[dict] | None = None,
 ) -> dict:

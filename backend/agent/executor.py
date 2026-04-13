@@ -56,7 +56,7 @@ async def _compress(tool: str, text: str) -> str:
     return text
 
 
-async def run(plan_dict: dict, context: ContextWindow, model: str = "gpt-4o-mini") -> list[dict]:
+async def run(plan_dict: dict, context: ContextWindow, model: str = "gpt-4.1-mini") -> list[dict]:
     """Blocking run — used by CLI. Consumes the generator and discards log events."""
     results = []
     for task in plan_dict["tasks"]:
@@ -140,7 +140,7 @@ async def _execute_task(
 
     yield {"type": "task_result", "task_id": task_id, "text": response["text"]}
 
-async def run_stream(plan_dict: dict, context: ContextWindow, model: str = "gpt-4o-mini"):
+async def run_stream(plan_dict: dict, context: ContextWindow, model: str = "gpt-4.1-mini"):
     """
     Async generator for SSE — used by POST /chat/run.
 

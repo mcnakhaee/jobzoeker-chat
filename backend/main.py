@@ -49,11 +49,11 @@ app.add_middleware(
 
 class PlanRequest(BaseModel):
     message: str
-    model: str = "gpt-4o-mini"
+    model: str = "gpt-4.1-mini"
 
 class RunRequest(BaseModel):
     plan: dict
-    model: str = "gpt-4o-mini"
+    model: str = "gpt-4.1-mini"
 
 
 # ---------------------------------------------------------------------------

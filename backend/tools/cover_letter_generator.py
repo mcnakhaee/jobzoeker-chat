@@ -66,7 +66,7 @@ async def compose_cover_letter(job_description: str, user_profile: str) -> dict:
     response = await call_llm(
     user_prompt,
     COVER_LETTER_PROMPT,
-    model =  "gpt-4o-mini",
+    model =  "gpt-4.1-mini",
 )
         
     letter = response.get("text", "").strip()

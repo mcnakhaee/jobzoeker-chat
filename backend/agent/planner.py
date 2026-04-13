@@ -56,7 +56,7 @@ User: "Hi, what can you do?"
 """
 
 
-async def plan(query: str, context: ContextWindow, model: str = "gpt-4o-mini") -> dict:
+async def plan(query: str, context: ContextWindow, model: str = "gpt-4.1-mini") -> dict:
     """
     Convert a user query into a structured task plan.
 
