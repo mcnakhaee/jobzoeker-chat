@@ -1,4 +1,5 @@
 openai>=1.30.0
+packaging>=23.0
 notion-client>=2.2.1
 weaviate-client>=4.6.0
 pandas>=2.0.0
