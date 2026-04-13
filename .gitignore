@@ -1,0 +1,29 @@
+# Environment variables — never commit
+.env
+*.env
+.env.*
+
+# Jupyter notebooks — can contain hardcoded secrets
+.ipynb_checkpoints/
+.virtual_documents/
+*.ipynb
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+*.egg-info/
+
+# Node / frontend
+node_modules/
+frontend/dist/
+frontend/.vite/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
