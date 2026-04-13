@@ -26,6 +26,8 @@ Agent: Found 4 jobs. Saved to "ggplot2 Jobs – Amsterdam" in Notion.
 
 ## Agent loop
 
+![How the system works](schema.png)
+
 It uses the built-in OpenAI function calling API and no extra frameworks are used. The loop is three functions:
 
 ```
@@ -162,7 +164,7 @@ The UI is served at `http://localhost:5173` and expects the backend at `http://l
 
 ## Evaluation scenarios
 
-The simplest systematic way to evaluate the planning and execution stages is a golden dataset: fixed queries mapped to expected tool sequences, then measuring exact-match and partial-match rates. That is not implemented here due to time. Instead, below are five concrete scenarios with explicit pass/fail criteria that can be checked manually or scripted.
+The simplest  way to evaluate the planning and execution stages is a golden dataset but that is not implemented here due to time. Instead, below are 2 concrete scenarios:
 
 ---
 
@@ -192,44 +194,6 @@ The simplest systematic way to evaluate the planning and execution stages is a g
 
 ---
 
-**Scenario 3 — Cover letter with empty profile**
-
-> *"Write a cover letter for a Senior Data Scientist role at ASML"*
-> (user profile left blank)
-
-| Check | Success |
-|---|---|
-| Planner produces 1 task with `tool = "cover_letter"` | ✅ |
-| Agent response asks the user for background information rather than hallucinating experience | ✅ |
-| No job search is triggered | ✅ |
-
----
-
-**Scenario 4 — Context carry-over (follow-up turn)**
-
-> Turn 1: *"Find ML engineer jobs in Amsterdam"*
-> Turn 2: *"Save the first result to Notion"*
-
-| Check | Success |
-|---|---|
-| Turn 2 planner does NOT emit a new `job_search` task | ✅ |
-| Turn 2 planner emits a `notion` task referencing the job from turn 1 context | ✅ |
-| Notion page is created without re-querying Weaviate | ✅ |
-
-Failure here means the context window or caveman compression dropped enough information that the planner couldn't identify the earlier result.
-
----
-
-**Scenario 5 — Graceful tool error**
-
-> *"Find Fortran jobs in Amsterdam"* (no such jobs in the index)
-
-| Check | Success |
-|---|---|
-| `find_similar_jobs` returns `count = 0` | ✅ |
-| Agent response acknowledges no results were found and suggests an alternative (different keyword or location) | ✅ |
-| Agent does not fabricate job listings | ✅ |
-| No crash or 500 from the backend | ✅ |
 
 
 ## Trade-offs
@@ -247,9 +211,9 @@ Failure here means the context window or caveman compression dropped enough info
 ---
 
 ## Example transcript
-![AI job search execution](file://done-scr.png)
+![AI job search execution](done-scr.png)
 
-![Agent thinking process](file://thinking-scr.png)
+![Agent thinking process](thinking-scr.png)
 Real session captured from the chat UI. User goal: find AI engineering jobs in Amsterdam, save them to Notion, and look up one company.
 
 ---
