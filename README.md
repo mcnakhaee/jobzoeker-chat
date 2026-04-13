@@ -13,14 +13,6 @@ The project was inspired by my own need and a previous CI/CD pipeline I created 
 
 You describe your job search goal to the AI agent. The AI agent then breaks it into tasks, runs each one using (real) defined tools, and reports back.
 
-```
-You:   "Find ggplot2 jobs in Amsterdam and save them to Notion"
-
-Plan:  1. Search for LLM jobs in Amsterdam (RAG)  [job_search]
-       2. Save results to Notion jobs board       [notion]
-
-Agent: Found 4 jobs. Saved to "ggplot2 Jobs – Amsterdam" in Notion.
-```
 
 ---
 
@@ -194,7 +186,20 @@ The simplest  way to evaluate the planning and execution stages is a golden data
 
 ---
 
+---
 
+**Scenario 3 — Cover letter with empty profile**
+
+> *"Write a cover letter for a Senior Data Scientist role at ASML"*
+> (user profile left blank)
+
+| Check | Success |
+|---|---|
+| Planner produces 1 task with `tool = "cover_letter"` | ✅ |
+| Agent response asks the user for background information rather than hallucinating experience | ✅ |
+| No job search is triggered | ✅ |
+
+---
 
 ## Trade-offs
 
