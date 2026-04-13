@@ -46,7 +46,8 @@ async def _compress(tool: str, text: str) -> str:
     if tool in ("none", "job_search"):
         return text
     if tool == "notion":
-        return f"[notion] {text.strip().splitlines()[0]}"
+        lines = text.strip().splitlines()
+        return f"[notion] {lines[0]}" if lines else "[notion] done"
     if tool == "cover_letter":
         response = await call_llm(
             messages=[{"role": "user", "content": text}],
