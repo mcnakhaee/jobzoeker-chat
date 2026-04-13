@@ -20,6 +20,9 @@ node_modules/
 frontend/dist/
 frontend/.vite/
 
+# Backend static files (built from frontend, generated at Heroku build time)
+backend/static/
+
 # OS
 .DS_Store
 Thumbs.db

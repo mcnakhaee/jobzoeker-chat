@@ -2,11 +2,13 @@ import json
 import logging
 import os
 from contextlib import asynccontextmanager
+from pathlib import Path
 
 from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import StreamingResponse
+from fastapi.responses import FileResponse, StreamingResponse
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
 from agent.planner import plan
@@ -29,10 +31,13 @@ async def lifespan(app: FastAPI):
     await close_weaviate()
 
 
+_default_origins = "http://localhost:5173,http://localhost:5174"
+_allowed_origins = os.getenv("ALLOWED_ORIGINS", _default_origins).split(",")
+
 app = FastAPI(title="Jobzoeker Chat", lifespan=lifespan)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173","http://localhost:5174"],
+    allow_origins=_allowed_origins,
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -122,3 +127,22 @@ async def get_context():
 async def reset_context():
     _context.clear()
     return {"status": "ok"}
+
+
+# ---------------------------------------------------------------------------
+# Frontend — serve built React app (production only)
+# ---------------------------------------------------------------------------
+
+_static_dir = Path(__file__).parent / "static"
+if _static_dir.exists():
+    app.mount("/assets", StaticFiles(directory=str(_static_dir / "assets")), name="assets")
+
+    @app.get("/{full_path:path}")
+    async def serve_spa(full_path: str):
+        """Catch-all: serve index.html for any unknown route (SPA client-side routing)."""
+        index = _static_dir / "index.html"
+        # Serve known root-level static files (favicon, icons, etc.) directly
+        candidate = _static_dir / full_path
+        if candidate.is_file():
+            return FileResponse(str(candidate))
+        return FileResponse(str(index))

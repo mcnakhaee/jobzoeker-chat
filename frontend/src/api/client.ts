@@ -1,6 +1,6 @@
 import type { Plan, UserProfile } from '../types';
 
-const BASE = 'http://localhost:8000';
+const BASE = import.meta.env.VITE_API_BASE ?? '';
 
 export async function generatePlan(message: string, model = 'gpt-4o-mini'): Promise<Plan> {
   const res = await fetch(`${BASE}/chat/plan`, {
