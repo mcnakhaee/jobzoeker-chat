@@ -1,5 +1,5 @@
 import logging
-from utils import _ARTICLES, _FILLERS, _PLEASANTRIES, _HEDGING, _SYNONYM_MAP, caveman, remove_stopwords
+from utils import caveman, remove_stopwords
 
 logger = logging.getLogger(__name__)
 
@@ -24,7 +24,7 @@ class ContextWindow:
 
     def add_assistant(self, content: str) -> None:
         if content:
-            self._messages.append({"role": "assistant", "content": caveman(content)})
+            self._messages.append({"role": "assistant", "content": remove_stopwords(caveman(content))})
 
     def get_messages(self) -> list[dict]:
         return list(self._messages)

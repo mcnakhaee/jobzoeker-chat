@@ -10,6 +10,12 @@ The project was inspired by my own need and a previous CI/CD pipeline I created 
 ---
 
 ## What it does
+Basically what you can do with this is project is:
+1. Search and retrieve semantically similar jobs based on your query using a vector DB hosted on Weaviate
+
+2. Save the retrieved jobs to a Notion page/database
+
+3. Compose a cover letter based on the job description of the retrieved job 
 
 You describe your job search goal to the AI agent. The AI agent then breaks it into tasks, runs each one using (real) defined tools, and reports back.
 
