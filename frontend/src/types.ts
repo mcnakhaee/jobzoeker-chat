@@ -29,4 +29,5 @@ export type PlanPhase = 'confirming' | 'running' | 'done';
 
 export type ChatMessage =
   | { id: string; type: 'user'; content: string }
+  | { id: string; type: 'assistant'; content: string }
   | { id: string; type: 'plan'; plan: Plan; tasks: Task[]; phase: PlanPhase; error?: string };

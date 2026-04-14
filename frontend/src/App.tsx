@@ -21,7 +21,7 @@ export default function App() {
   const [planning, setPlanning] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [contextOpen, setContextOpen] = useState(false);
-  const model = 'gpt-4o-mini';
+  const model = 'gpt-4.1-mini';
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -49,6 +49,26 @@ export default function App() {
 
     try {
       const plan = await generatePlan(text, model);
+
+      // Simple conversational message (greeting, question, no tool needed) —
+      // auto-run immediately and show the response as a plain assistant bubble.
+      if (plan.tasks.length === 1 && plan.tasks[0].tool === 'none') {
+        let summary = '';
+        await new Promise<void>(resolve => {
+          const cancel = runPlan(plan, model, event => {
+            if (event.type === 'task_done') summary = event.summary ?? '';
+            if (event.type === 'complete' || event.type === 'error') resolve();
+          });
+          cancelRunRef.current = cancel;
+        });
+        cancelRunRef.current = null;
+        setMessages(prev => [
+          ...prev,
+          { id: uid(), type: 'assistant' as const, content: summary || '…' },
+        ]);
+        return;
+      }
+
       setMessages(prev => [
         ...prev,
         {
@@ -91,6 +111,8 @@ export default function App() {
       ),
     );
 
+    const taskSummaries: string[] = [];
+
     const cancel = runPlan(planToRun, model, event => {
       if (event.type === 'task_start' && event.task_id != null) {
         setMessages(prev =>
@@ -128,6 +150,7 @@ export default function App() {
           }),
         );
       } else if (event.type === 'task_done' && event.task_id != null) {
+        if (event.summary) taskSummaries.push(event.summary);
         setMessages(prev =>
           prev.map(m => {
             if (m.id !== msgId || m.type !== 'plan') return m;
@@ -142,11 +165,16 @@ export default function App() {
           }),
         );
       } else if (event.type === 'complete') {
-        setMessages(prev =>
-          prev.map(m =>
+        const combined = taskSummaries.join('\n\n').trim();
+        setMessages(prev => {
+          const updated = prev.map(m =>
             m.id === msgId && m.type === 'plan' ? { ...m, phase: 'done' as PlanPhase } : m,
-          ),
-        );
+          );
+          if (combined) {
+            return [...updated, { id: uid(), type: 'assistant' as const, content: combined }];
+          }
+          return updated;
+        });
         cancelRunRef.current = null;
       } else if (event.type === 'error') {
         setMessages(prev =>
@@ -270,6 +298,8 @@ export default function App() {
             <div key={msg.id} className={`msg-row ${msg.type === 'user' ? 'msg-user' : 'msg-agent'}`}>
               {msg.type === 'user' ? (
                 <div className="user-bubble">{msg.content}</div>
+              ) : msg.type === 'assistant' ? (
+                <div className="assistant-bubble">{msg.content}</div>
               ) : (
                 <PlanMessage
                   plan={msg.plan}

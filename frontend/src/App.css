@@ -297,6 +297,20 @@
   to   { opacity: 1; transform: translateY(0); }
 }
 
+/* ─── Assistant bubble ───────────────────────────────────── */
+.assistant-bubble {
+  background: var(--surface);
+  color: var(--text);
+  padding: 11px 16px;
+  border-radius: 18px 18px 18px 4px;
+  max-width: 680px;
+  font-size: 15px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  word-break: break-word;
+  border: 1px solid var(--border);
+}
+
 /* ─── User bubble ─────────────────────────────────────────── */
 .user-bubble {
   background: var(--accent);
